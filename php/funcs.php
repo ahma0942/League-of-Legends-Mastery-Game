@@ -21,6 +21,15 @@ function redir($str)
 	exit;
 }
 
+function alert($str)
+{
+	?>
+	<script>
+	window.alert("<?php echo $str; ?>");
+	</script>
+	<?php
+}
+
 function validateSummoner($name,$server)
 {
 	global $api;
@@ -63,7 +72,7 @@ function ValidateLogin($str=false)
 	$str=dc($str);
 	$str=explode(":",decrypt($str,strlen($str)));
 	if(!isset($str[1]) OR count($str)!=2) return 2;
-	$sql=sql("SELECT id FROM league_mastery_game WHERE summoner_name='".esc($str[0])."' AND server='".esc($str[1])."'",1);
+	$sql=sql("SELECT id FROM league_mastery_game WHERE summoner_name='".esc($str[0])."' AND server_id='".esc($str[1])."'",1);
 	if(!$sql) return 3;
 	return $str;
 }
