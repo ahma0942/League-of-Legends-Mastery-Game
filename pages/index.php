@@ -1,9 +1,8 @@
 <?php
 if(isset($_COOKIE['Login']))
 {
-	$chk=ValidateLogin($_COOKIE['Login']);
-	alert($chk);
-	if(is_array($chk)){
+	if(isset($_SESSION['id'])){
+		updateMastery();
 		include "/pages/index/play.php";
 	}
 	else{

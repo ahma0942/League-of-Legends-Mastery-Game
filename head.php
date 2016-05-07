@@ -1,3 +1,7 @@
+<?php
+$dir = new DirectoryIterator("img/bg/");
+foreach($dir as $fileinfo) if(!$fileinfo->isDot()) $ARR["BGIMGS"][]=explode(".",$fileinfo->getFilename())[0];
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -9,16 +13,18 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<![endif]-->
 	<title>League of Legends Mastery Game</title>
-	<link href="css/bootstrap.css" rel="stylesheet" />
-	<link href="css/font-awesome.css" rel="stylesheet" />
-	<link href="css/style.css" rel="stylesheet" />
-	<link href="css/css.css" rel="stylesheet" />
+	<style type="text/css">
+	body {
+		font-family:'Open Sans',sans-serif;
+		background-image: url("img/bg/<?=$ARR["BGIMGS"][rand(0,count($ARR["BGIMGS"])-1)];?>.jpg");
+		background-size:cover
+	}
+	</style>
+	<link href="css/css.css" rel="stylesheet"/>
 	<script src='js/jquery.js'></script>
 	<script src='js/js.js'></script>
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top " >
-        <div class="container">
-			<?php include "menu.php"; ?>
-        </div>
-    </div>
+	<?php include "menu.php"; ?>
+	<div id="output"></div>
+	<div id="content">

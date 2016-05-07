@@ -1,6 +1,18 @@
 <?php
-$api="4038b276-02ca-4e36-a2e9-ebce41783ab6";
+include "../API.php";
 $ARRAY_ALLOWED_CHARS=array('!','"','#','$','%','&',"'",'(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','[',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','{','|','}','~',' ');
+
+function updateMastery()
+{
+	global $api;
+	$link="https://$_SESSION[server].api.pvp.net/championmastery/location/$_SESSION[server]1/player/$_SESSION[summoner_id]/score?api_key=$api";
+	$curl=curl($link);
+	$sql=sql("SELECT id FROM league_mastery_game WHERE id='$_SESSION[id]' AND mastery='$curl'",1);
+	if(!$sql){
+		$sql=sql("UPDATE league_mastery_game SET mastery='$curl' WHERE id='$_SESSION[id]'");
+		$_SESSION['mastery']=$curl;
+	}
+}
 
 function ValidateMasteryPage($id,$server,$code)
 {
@@ -66,6 +78,23 @@ function rand_str($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq
 	return $str;
 }
 
+function FoundMatch()
+{
+	global $ARR;
+	$sql=sql("SELECT player1 FROM match_found WHERE player2='$_SESSION[id]'",1);
+	if($sql) return 1;
+	$sql=sql("SELECT id FROM league_mastery_game WHERE mastery>='".($_SESSION['mastery']-$ARR['RANK'])."' AND mastery<='".($_SESSION['mastery']+$ARR['RANK'])."' AND queue='1' AND id!='$_SESSION[id]'",1);
+	if($sql)
+	{
+		$sql=sql("SELECT id FROM league_mastery_game WHERE mastery>='".($_SESSION['mastery']-$ARR['RANK'])."' AND mastery<='".($_SESSION['mastery']+$ARR['RANK'])."' AND queue='1' AND id!='$_SESSION[id]'",2);
+		$id=$sql[0]['id'];
+		$sql1=sql("INSERT INTO match_found (player1,player2,timestamp) VALUES($_SESSION[id],$id,".time().")");
+		$sql2=sql("UPDATE league_mastery_game SET queue=0 WHERE id=$_SESSION[id] OR id=$id");
+		if($sql1 AND $sql2) return 1;
+	}
+	return 0;
+}
+
 function ValidateLogin($str=false)
 {
 	if(!$str) return 1;
@@ -74,6 +103,10 @@ function ValidateLogin($str=false)
 	if(!isset($str[1]) OR count($str)!=2) return 2;
 	$sql=sql("SELECT id FROM league_mastery_game WHERE summoner_name='".esc($str[0])."' AND server_id='".esc($str[1])."'",1);
 	if(!$sql) return 3;
+	$sql=sql("SELECT id,summoner_id,summoner_name,server_id,mastery,timestamp,rank FROM league_mastery_game WHERE summoner_name='".esc($str[0])."' AND server_id='".esc($str[1])."'",2);
+	foreach($sql[0] AS $name=>$val) $_SESSION[$name]=$val;
+	$sql=sql("SELECT server FROM servers WHERE id='$_SESSION[server_id]'",2);
+	$_SESSION['server']=$sql[0]['server'];
 	return $str;
 }
 
@@ -226,5 +259,18 @@ function decrypt($str,$num=5,$i=0)
 		$result.=$ARRAY_ALLOWED_CHARS[$new_key];
 	}
 	return $result;
+}
+
+function dlg($msg,$header="Information",$dlg_num=0)
+{
+	return <<<EOF
+	<div class="dlg" id="dlg$dlg_num">
+		<div class="bot">
+			<b class='header'><font size='+2' style='text-align:center;padding:10px;'>$header</font></b>
+			<hr style='width:100%;border: 1px solid black;'/>
+			<span>$msg</span>
+		</div>
+	</div>
+EOF;
 }
 ?>
