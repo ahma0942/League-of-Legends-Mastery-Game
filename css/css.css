@@ -1,5 +1,6 @@
-body * {
+body *:not(input):not(select):not(option) {
 	border-radius:5px;
+	color:white;
 }
 
 div#menu {

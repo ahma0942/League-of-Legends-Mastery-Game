@@ -21,7 +21,7 @@ if($_POST['action']=="VALIDATION")
 		$_SESSION['login']=$login;
 		echo "<div class='cookie' name='Login' exp='".(60*60*24*365*100)."'>$login</div>";
 	}
-	else echo "Validation NOT successful";
+	else echo "<div class='output'>Validation NOT successful</div>";
 }
 elseif($_POST['action']=="START_QUEUE")
 {
