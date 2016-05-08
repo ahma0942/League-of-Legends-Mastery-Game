@@ -2,6 +2,27 @@
 include "API.php";
 $ARRAY_ALLOWED_CHARS=array('!','"','#','$','%','&',"'",'(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','[',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','{','|','}','~',' ');
 
+function randnum($min=1,$max=10,$amount=1,$unique=false)
+{
+	if(!is_numeric($min)) $min=1;
+	if(!is_numeric($max)) $max=10;
+	if(!is_numeric($amount) OR $amount<1) $amount=1;
+	if($amount==1) return rand($min,$max);
+	if($max-$min>$amount AND $unique===true) $amount=$max-$min;
+	$ret=array();
+	for($i=1;$i<=$amount;$i++)
+	{
+		if(!$unique) $ret[]=rand($min,$max);
+		else
+		{
+			$in=rand($min,$max);
+			while(in_array($in,$ret)) $in=rand($min,$max);
+			$ret[]=$in;
+		}
+	}
+	return $ret;
+}
+
 function updateMastery()
 {
 	global $api;

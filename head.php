@@ -1,6 +1,7 @@
 <?php
 $dir = new DirectoryIterator("img/bg/");
 foreach($dir as $fileinfo) if(!$fileinfo->isDot()) $ARR["BGIMGS"][]=explode(".",$fileinfo->getFilename())[0];
+$ping=(isset($_SESSION['id'])?"<script src='js/ping.js'></script>":"");
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -23,6 +24,7 @@ foreach($dir as $fileinfo) if(!$fileinfo->isDot()) $ARR["BGIMGS"][]=explode(".",
 	<link href="css/css.css" rel="stylesheet"/>
 	<script src='js/jquery.js'></script>
 	<script src='js/js.js'></script>
+	<?=$ping?>
 </head>
 <body>
 	<?php include "menu.php"; ?>

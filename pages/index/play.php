@@ -12,16 +12,16 @@ if(!isset($_SESSION['game']))
 	{
 		$("#queue").html('Stop Queue');
 		ajax("sql/check.php",{action:"START_QUEUE"},"POST",function(res){
-			ping(res);
+			check_queue(res);
 		});
 		timer=setInterval(function(){
 			ajax("sql/check.php",{action:"FOUND_MATCH"},"POST",function(res){
-				ping(res);
+				check_queue(res);
 			});
 		},3000);
 	}
 
-	function ping(res)
+	function check_queue(res)
 	{
 		if(res[0]=="1"){
 			clearInterval(timer);
@@ -77,6 +77,16 @@ if(!isset($_SESSION['game']))
 }
 else
 {
-	
+	echo "<br/><br/><br/>";
+	if($_SESSION['p1']===true)
+	{
+		if(!isset($_SESSION['done'])) $_SESSION['done']=false;
+		if($_SESSION['done']===false)
+		{
+			sql("DELETE FROM match_found WHERE player1=$_SESSION[id] OR player2=$_SESSION[id]");
+			$_SESSION['done']=true;
+		}
+	}
+	print_r($_SESSION['q']);
 }
 ?>

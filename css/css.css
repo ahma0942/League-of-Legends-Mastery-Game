@@ -1,4 +1,4 @@
-body *:not(input):not(select):not(option) {
+body *:not(input):not(select):not(option):not(textarea) {
 	border-radius:5px;
 	color:white;
 }
