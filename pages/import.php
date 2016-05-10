@@ -5,8 +5,9 @@ if(isset($_POST['text']))
 	$str=explode("\n",$_POST['text']);
 	foreach($str as $line)
 	{
+		$line=str_replace("\r","",$line);
 		$row=explode(";",$line);
-		if($row[0][0]=='"' && $row[0][strlen($row[0])-1]=='"') $row[0]="Which champion has the following quote, <quote>".$row[0]."</quote>";
+		if($row[0][0]=='"' && $row[0][strlen($row[0])-1]=='"') $row[0]="Which champion has the following quote, <quote>".str_replace('"',"",$row[0])."</quote>";
 		$out=[
 			"Q"=>$row[0],
 			"C"=>array(

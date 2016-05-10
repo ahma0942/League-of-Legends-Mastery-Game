@@ -7,14 +7,14 @@ $(document).ready(function(){
 	});
 });
 
-function counter(time,delay,callback,extra)
+function counter(elm,time,delay,callback,extra)
 {
 	var timeFunc=(function(res){
 		var start=time;
 		var timer=setInterval(function(){
 			if(start==0) clearInterval(timer);
 			start--;
-			if(start>=0) $(".counter").html(start);
+			if(start>=0) $(elm).html(start);
 		},1000);
 		setTimeout(function(){callback()},(isset(extra)?extra*1000:0)+time*1000);
 	});
@@ -40,6 +40,7 @@ function ajaxdata(data)
 {
 	var dat=false;
 	var ret=false;
+	if($(data).filter('div.refresh').length) location.reload();
 	if($(data).filter('div.output').length) dat=$(data).filter('div.output').html();
 	if($(data).filter('div.return').length) ret=$(data).filter('div.return').html();
 	if(!$(data).filter('div.noalert').length) alert(dat);

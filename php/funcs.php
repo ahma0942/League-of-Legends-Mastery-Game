@@ -102,18 +102,31 @@ function rand_str($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq
 function FoundMatch()
 {
 	global $ARR;
-	$sql=sql("SELECT player1 FROM match_found WHERE player2='$_SESSION[id]'",1);
+	$sql=sql("SELECT player1 FROM match_found WHERE player1=$_SESSION[id] OR player2=$_SESSION[id]",1);
 	if($sql) return 1;
-	$sql=sql("SELECT id FROM league_mastery_game WHERE mastery>='".($_SESSION['mastery']-$ARR['RANK'])."' AND mastery<='".($_SESSION['mastery']+$ARR['RANK'])."' AND queue='1' AND id!='$_SESSION[id]'",1);
+	$sql=sql("SELECT id FROM league_mastery_game WHERE queue=1 AND id!=$_SESSION[id]",1);
 	if($sql)
 	{
-		$sql=sql("SELECT id FROM league_mastery_game WHERE mastery>='".($_SESSION['mastery']-$ARR['RANK'])."' AND mastery<='".($_SESSION['mastery']+$ARR['RANK'])."' AND queue='1' AND id!='$_SESSION[id]'",2);
+		$sql=sql("SELECT id FROM league_mastery_game WHERE queue=1 AND id!=$_SESSION[id]",2);
 		$id=$sql[0]['id'];
-		$sql1=sql("INSERT INTO match_found (player1,player2,timestamp) VALUES($_SESSION[id],$id,".time().")");
-		$sql2=sql("UPDATE league_mastery_game SET queue=0 WHERE id=$_SESSION[id] OR id=$id");
-		if($sql1 AND $sql2) return 1;
+		$sql=sql("SELECT player1 FROM match_found WHERE player1=$_SESSION[id] OR player2=$_SESSION[id]",1);
+		if(!$sql){
+			$sql1=sql("INSERT INTO match_found (player1,player2,timestamp) VALUES($_SESSION[id],$id,".time().")");
+			$sql2=sql("UPDATE league_mastery_game SET queue=0 WHERE id=$_SESSION[id] OR id=$id");
+		}
+		return 1;
 	}
 	return 0;
+}
+
+function h($str)
+{
+	return htmlspecialchars($str,ENT_QUOTES,'UTF-8');
+}
+
+function updateLastOn()
+{
+	if(isset($_SESSION['id'])) sql("UPDATE league_mastery_game SET last_on=".time()." WHERE id=$_SESSION[id]");
 }
 
 function ValidateLogin($str=false)

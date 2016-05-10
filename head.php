@@ -1,7 +1,6 @@
 <?php
 $dir = new DirectoryIterator("img/bg/");
 foreach($dir as $fileinfo) if(!$fileinfo->isDot()) $ARR["BGIMGS"][]=explode(".",$fileinfo->getFilename())[0];
-$ping=(isset($_SESSION['id'])?"<script src='js/ping.js'></script>":"");
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,13 +17,13 @@ $ping=(isset($_SESSION['id'])?"<script src='js/ping.js'></script>":"");
 	body {
 		font-family:'Open Sans',sans-serif;
 		background-image: url("img/bg/<?=$ARR["BGIMGS"][rand(0,count($ARR["BGIMGS"])-1)];?>.jpg");
-		background-size:cover
+		background-size:cover;
+		background-attachment:fixed;
 	}
 	</style>
 	<link href="css/css.css" rel="stylesheet"/>
 	<script src='js/jquery.js'></script>
 	<script src='js/js.js'></script>
-	<?=$ping?>
 </head>
 <body>
 	<?php include "menu.php"; ?>

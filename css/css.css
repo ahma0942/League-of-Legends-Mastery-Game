@@ -1,4 +1,4 @@
-body *:not(input):not(select):not(option):not(textarea) {
+body *:not(input):not(select):not(option):not(textarea):not(font):not(table):not(tr):not(td) {
 	border-radius:5px;
 	color:white;
 }
@@ -51,6 +51,14 @@ div#menu li a:hover {
 	border-radius:2px;
 }
 
+:disabled {
+	cursor:default;
+	pointer-events:none;
+	color:black;
+	background-color:#dddddd;
+	background:#dddddd;
+}
+
 .btn2 {
 	width:100px;
 	line-height:15px;
@@ -93,11 +101,6 @@ div#menu li a:hover {
 	background:linear-gradient(rgb(36,79,94),rgb(16,40,46));
 }
 
-div#content {
-	margin:auto;
-	width:60%;
-}
-
 div.dlg {
 	top:0px;
 	left:0px;
@@ -112,7 +115,7 @@ div.dlg div.bot {
 	width:540px;
 	margin-right:-25%;
 	position:absolute;
-	z-index:2;
+	z-index:100;
 	border:1px solid black;
 	left:calc(50% - 270px);
 	bottom:50%;
@@ -144,4 +147,26 @@ input[type="text"]{
 	height:25px;
 	width: 275px;
 	
+}
+
+quote {
+	font-style:italic;
+	font-weight:900;
+}
+
+.num {
+	font-size:30px;
+	color:#FFCC33;
+}
+
+div#content {
+	background:rgba(102,153,102,0.7);
+	height:100%;
+	width:70%;
+	margin:auto;
+	padding:20px;
+}
+
+div#main {
+	position:relative;
 }

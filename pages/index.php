@@ -19,9 +19,15 @@ else
 		$chk=validateSummoner($_GET['name'],$sql[0]['server']);
 		if($chk===false) die("<br/><br/><br/>The given summoner name doesn't exist in the given server");
 		$sql=sql("SELECT id FROM league_mastery_game WHERE summoner_name='".esc($_GET['name'])."'",1);
-		$code=rand_str(10);
-		if($sql) $sql=sql("UPDATE league_mastery_game SET validation='$code' WHERE summoner_name='".esc($_GET['name'])."'");
-		else $sql=sql("INSERT INTO league_mastery_game (summoner_id,summoner_name,server_id,mastery,timestamp,validation) VALUES ('$chk','$_GET[name]','$_GET[server]','0','".time()."','$code')");
+		if($sql)
+		{
+			if(!isset($_SESSION['code']))
+			{
+				$_SESSION['code']=rand_str(10);
+				$sql=sql("UPDATE league_mastery_game SET validation='$_SESSION[code]' WHERE summoner_name='".esc($_GET['name'])."'");
+			}
+		}
+		else $sql=sql("INSERT INTO league_mastery_game (summoner_id,summoner_name,server_id,mastery,timestamp,validation) VALUES ('$chk','$_GET[name]','$_GET[server]','0','".time()."','".rand_str(10)."')");
 		if(!$sql) die("Something went wrong, please try again");
 		include "/pages/index/validation.php";
 	}
